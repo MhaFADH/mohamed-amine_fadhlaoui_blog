@@ -25,7 +25,7 @@ const handle = mw({
     }) => {
       const user = await UserModel.query().findOne({ email })
 
-      if (!user) {
+      if (!user || !user.enabled) {
         throw new UnauthorizedError()
       }
 
@@ -42,6 +42,9 @@ const handle = mw({
         {
           payload: {
             id: user.id,
+            username: user.username,
+            enabled: user.enabled,
+            isAdmin: user.isAdmin,
           },
         },
         config.security.jwt.secret,
@@ -60,7 +63,6 @@ const handle = mw({
   ],
 
   DELETE: [
-    auth,
     ({ res }) => {
       const cookie = new NextResponse().cookies.set({
         name: config.security.jwt.cookieName,

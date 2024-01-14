@@ -4,22 +4,24 @@ import FormField from "@/web/components/ui/FormField"
 import axios from "axios"
 import { Formik } from "formik"
 import { object } from "yup"
+import { useSession } from "@/web/components/SessionContext"
 
 const initialValues = {
   description: "",
-  categoryId: 40,
+  categoryId: 6,
 }
 const validationSchema = object({
   description: todoDescriptionValidator.label("Description"),
 })
 const CreateTodoPage = () => {
+  const { session } = useSession()
   const handleSubmit = async (values, { resetForm }) => {
     await axios.post("http://localhost:3000/api/todos", values)
 
     resetForm()
   }
 
-  return (
+  return session ? (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
@@ -35,6 +37,8 @@ const CreateTodoPage = () => {
         </button>
       </Form>
     </Formik>
+  ) : (
+    <p>FORBIDDEN</p>
   )
 }
 

@@ -51,8 +51,6 @@ const IndexPage = ({ initialData }) => {
     await refetch()
   }
 
-  console.log(session)
-
   return (
     <div className="relative">
       {isFetching && <Loader />}
