@@ -57,27 +57,6 @@ const handle = mw({
       res.send(updatedTodo)
     },
   ],
-  DELETE: [
-    auth,
-    validate({
-      query: {
-        todoId: idValidator,
-      },
-    }),
-    async ({
-      models: { TodoModel },
-      input: {
-        query: { todoId },
-      },
-      res,
-    }) => {
-      const todo = await TodoModel.query().findById(todoId).throwIfNotFound()
-
-      await todo.$query().delete()
-
-      res.send(todo)
-    },
-  ],
 })
 
 export default handle

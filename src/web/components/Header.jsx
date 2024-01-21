@@ -28,7 +28,7 @@ const Header = () => {
                   Edit profile
                 </MenuItem>
 
-                <MenuItem href="/todos/create">Create post</MenuItem>
+                <MenuItem href="/posts/create">Create post</MenuItem>
                 <MenuItem href="/users-list">List users</MenuItem>
                 <li>
                   <Button

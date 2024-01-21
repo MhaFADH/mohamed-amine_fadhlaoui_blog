@@ -1,23 +1,34 @@
 import auth from "@/api/middlewares/auth"
 import { validate } from "@/api/middlewares/validate"
 import mw from "@/api/mw"
-import { pageValidator } from "@/utils/validators"
+import {
+  pageValidator,
+  postContentValidator,
+  postTitleValidator,
+} from "@/utils/validators"
 import config from "@/web/config"
 
 const handle = mw({
   POST: [
     auth,
+    validate({
+      body: {
+        content: postContentValidator,
+        title: postTitleValidator,
+      },
+    }),
     async ({
       models: { PostModel },
       input: {
-        body: { title, content, userId },
+        body: { title, content },
       },
       res,
+      session,
     }) => {
       const post = await PostModel.query().insertAndFetch({
         title,
         content,
-        userId,
+        userId: session.id,
       })
 
       res.send(post)

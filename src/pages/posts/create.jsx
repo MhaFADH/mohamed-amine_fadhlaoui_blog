@@ -1,4 +1,4 @@
-import { todoDescriptionValidator } from "@/utils/validators"
+import { postContentValidator, postTitleValidator } from "@/utils/validators"
 import Form from "@/web/components/ui/Form"
 import FormField from "@/web/components/ui/FormField"
 import axios from "axios"
@@ -7,16 +7,17 @@ import { object } from "yup"
 import { useSession } from "@/web/components/SessionContext"
 
 const initialValues = {
-  description: "",
-  categoryId: 6,
+  title: "",
+  content: "",
 }
 const validationSchema = object({
-  description: todoDescriptionValidator.label("Description"),
+  title: postTitleValidator.label("Title"),
+  content: postContentValidator.label("Content"),
 })
 const CreateTodoPage = () => {
   const { session } = useSession()
   const handleSubmit = async (values, { resetForm }) => {
-    await axios.post("http://localhost:3000/api/todos", values)
+    await axios.post("http://localhost:3000/api/posts", values)
 
     resetForm()
   }
@@ -28,12 +29,13 @@ const CreateTodoPage = () => {
       onSubmit={handleSubmit}
     >
       <Form>
-        <FormField name="description" placeholder="Enter a description" />
+        <FormField name="title" placeholder="Enter a title" />
+        <FormField name="content" placeholder="Put your content" />
         <button
           type="submit"
           className="px-3 py-2 bg-blue-600 active:bg-blue-700 text-2xl text-white"
         >
-          Submit
+          Create
         </button>
       </Form>
     </Formik>
