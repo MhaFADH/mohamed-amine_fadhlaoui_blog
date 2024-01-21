@@ -7,48 +7,34 @@ import { useRouter } from "next/router"
 import { useSession } from "@/web/components/SessionContext"
 
 export const getServerSideProps = async ({ query: { page } }) => {
-  const data = await apiClient("/todos", { params: { page } })
+  const data = await apiClient("/posts", { params: { page } })
 
   return {
-    props: { initialData: data },
+    props: {
+      initialData: data,
+    },
   }
 }
 // eslint-disable-next-line max-lines-per-function
 const IndexPage = ({ initialData }) => {
   const { query } = useRouter()
+  const router = useRouter()
   const { session } = useSession()
   const page = Number.parseInt(query.page || 1, 10)
   const {
     isFetching,
     data: {
-      result: todos,
+      result: posts,
       meta: { count },
     },
-    refetch,
   } = useQuery({
-    queryKey: ["todos", page],
-    queryFn: () => apiClient("/todos", { params: { page } }),
+    queryKey: ["posts", page],
+    queryFn: () => apiClient("/posts", { params: { page } }),
     initialData,
     enabled: false,
   })
-  const { mutateAsync: toggleTodo } = useMutation({
-    mutationFn: (todo) =>
-      apiClient.patch(`/todos/${todo.id}`, {
-        isDone: !todo.isDone,
-      }),
-  })
-  const { mutateAsync: deleteTodo } = useMutation({
-    mutationFn: (todoId) => apiClient.delete(`/todos/${todoId}`),
-  })
-  const handleClickToggle = (id) => async () => {
-    const todo = todos.find(({ id: todoId }) => todoId === id)
-    await toggleTodo(todo)
-    await refetch()
-  }
-  const handleClickDelete = async (event) => {
-    const todoId = Number.parseInt(event.target.getAttribute("data-id"), 10)
-    await deleteTodo(todoId)
-    await refetch()
+  const handleClickEdit = (id) => {
+    router.push(`/posts/edit/${id}`)
   }
 
   return (
@@ -57,15 +43,7 @@ const IndexPage = ({ initialData }) => {
       <table className="w-full">
         <thead>
           <tr>
-            {[
-              "#",
-              "Description",
-              "Done",
-              "Category",
-              "Created At",
-              "",
-              "🗑️",
-            ].map((label) => (
+            {["#", "Title", "Author", "Created At", "Edit"].map((label) => (
               <td
                 key={label}
                 className="p-4 bg-slate-300 text-center font-semibold"
@@ -76,28 +54,22 @@ const IndexPage = ({ initialData }) => {
           </tr>
         </thead>
         <tbody>
-          {todos.map(
-            ({ id, description, isDone, createdAt, category: { name } }) => (
+          {posts.map(
+            ({ id, title, createdAt, user: { username, id: userId } }) => (
               <tr key={id} className="even:bg-slate-100">
                 <td className="p-4">{id}</td>
-                <td className="p-4">{description}</td>
-                <td className="p-4">{isDone ? "✅" : "❌"}</td>
-                <td className="p-4">{name}</td>
+                <td className="p-4">
+                  <a className="text-blue-400" href={`/posts/${id}`}>
+                    {title}
+                  </a>
+                </td>
+                <td className="p-4">{username}</td>
                 <td className="p-4">
                   {formatDateTimeShort(new Date(createdAt))}
                 </td>
                 <td className="p-4">
-                  {session ? (
-                    <button onClick={handleClickToggle(id)}>Toggle</button>
-                  ) : (
-                    <></>
-                  )}
-                </td>
-                <td className="p-4">
-                  {session ? (
-                    <button data-id={id} onClick={handleClickDelete}>
-                      Delete
-                    </button>
+                  {parseInt(session?.id, 10) === userId ? (
+                    <button onClick={() => handleClickEdit(id)}>Edit</button>
                   ) : (
                     <></>
                   )}

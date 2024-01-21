@@ -1,25 +1,26 @@
+import auth from "@/api/middlewares/auth"
 import { validate } from "@/api/middlewares/validate"
 import mw from "@/api/mw"
-import { categoryNameValidator, pageValidator } from "@/utils/validators"
+import { pageValidator } from "@/utils/validators"
 import config from "@/web/config"
 
 const handle = mw({
   POST: [
-    validate({
-      body: {
-        name: categoryNameValidator,
-      },
-    }),
+    auth,
     async ({
-      models: { CategoryModel },
+      models: { PostModel },
       input: {
-        body: { name },
+        body: { title, content, userId },
       },
       res,
     }) => {
-      const category = await CategoryModel.query().insertAndFetch({ name })
+      const post = await PostModel.query().insertAndFetch({
+        title,
+        content,
+        userId,
+      })
 
-      res.send(category)
+      res.send(post)
     },
   ],
   GET: [
@@ -30,20 +31,22 @@ const handle = mw({
     }),
     async ({
       res,
-      models: { CategoryModel },
+      models: { PostModel },
       input: {
         query: { page },
       },
     }) => {
-      const query = CategoryModel.query()
-      const categories = await query
+      const query = PostModel.query()
+      const posts = await query
         .clone()
+        .withGraphFetched("user")
+        .orderBy("createdAt", "DESC")
         .limit(config.ui.itemsPerPage)
         .offset((page - 1) * config.ui.itemsPerPage)
       const [{ count }] = await query.clone().count()
 
       res.send({
-        result: categories,
+        result: posts,
         meta: {
           count,
         },
