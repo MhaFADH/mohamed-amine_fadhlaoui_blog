@@ -19,6 +19,7 @@ const validationSchema = object({
 })
 const EditProfile = () => {
   const { query } = useRouter()
+  const router = useRouter()
   const userId = parseInt(query.userId, 10)
   const { session } = useSession()
   let authorized = false
@@ -30,9 +31,9 @@ const EditProfile = () => {
   const { mutateAsync } = useMutation({
     mutationFn: (values) => apiClient.patch(`/users/${userId}`, values),
   })
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values) => {
     await mutateAsync(values)
-    resetForm()
+    router.push("/")
 
     return true
   }

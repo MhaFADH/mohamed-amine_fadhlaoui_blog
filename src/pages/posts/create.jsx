@@ -5,6 +5,7 @@ import axios from "axios"
 import { Formik } from "formik"
 import { object } from "yup"
 import { useSession } from "@/web/components/SessionContext"
+import { useRouter } from "next/router"
 
 const initialValues = {
   title: "",
@@ -14,12 +15,12 @@ const validationSchema = object({
   title: postTitleValidator.label("Title"),
   content: postContentValidator.label("Content"),
 })
-const CreateTodoPage = () => {
+const CreatePost = () => {
   const { session } = useSession()
-  const handleSubmit = async (values, { resetForm }) => {
+  const router = useRouter()
+  const handleSubmit = async (values) => {
     await axios.post("http://localhost:3000/api/posts", values)
-
-    resetForm()
+    router.push("/")
   }
 
   return session ? (
@@ -44,4 +45,4 @@ const CreateTodoPage = () => {
   )
 }
 
-export default CreateTodoPage
+export default CreatePost

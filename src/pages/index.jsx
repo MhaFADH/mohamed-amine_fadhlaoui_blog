@@ -2,7 +2,7 @@ import { formatDateTimeShort } from "@/utils/formatters"
 import Loader from "@/web/components/ui/Loader"
 import Pagination from "@/web/components/ui/Pagination"
 import apiClient from "@/web/services/apiClient"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import { useSession } from "@/web/components/SessionContext"
 
@@ -31,7 +31,6 @@ const IndexPage = ({ initialData }) => {
     queryKey: ["posts", page],
     queryFn: () => apiClient("/posts", { params: { page } }),
     initialData,
-    enabled: false,
   })
   const handleClickEdit = (id) => {
     router.push(`/posts/edit/${id}`)
