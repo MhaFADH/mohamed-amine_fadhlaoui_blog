@@ -20,6 +20,7 @@ export const getServerSideProps = async ({ query: { page }, req }) => {
 // eslint-disable-next-line max-lines-per-function
 const UsersList = ({ initialData }) => {
   const { query } = useRouter()
+  const router = useRouter()
   const page = Number.parseInt(query.page || 1, 10)
   const {
     isFetching,
@@ -66,6 +67,10 @@ const UsersList = ({ initialData }) => {
     const user = users.find((ele) => ele.id === userId)
     await modifdyUser({ userId, modify: { enabled: !user.enabled } })
   }
+  const handleClickEdit = (event) => {
+    const userId = Number.parseInt(event.target.getAttribute("data-id"), 10)
+    router.push(`/edit-profile/${userId}`)
+  }
 
   return (
     <div className="relative">
@@ -80,6 +85,7 @@ const UsersList = ({ initialData }) => {
               "Admin",
               "PRIVILEGES",
               "DISABLE/ENABLE",
+              "EDIT",
               "DELETE",
             ].map((label) => (
               <td
@@ -114,6 +120,11 @@ const UsersList = ({ initialData }) => {
                   onClick={handleClickSChangeState}
                 >
                   Toggle
+                </button>
+              </td>
+              <td className="p-4">
+                <button data-id={id} onClick={handleClickEdit}>
+                  Edit
                 </button>
               </td>
               <td className="p-4">

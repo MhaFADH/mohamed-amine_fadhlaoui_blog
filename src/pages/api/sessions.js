@@ -1,5 +1,4 @@
 import { UnauthorizedError } from "@/api/errors"
-import auth from "@/api/middlewares/auth"
 import { validate } from "@/api/middlewares/validate"
 import mw from "@/api/mw"
 import config from "@/config.mjs"
