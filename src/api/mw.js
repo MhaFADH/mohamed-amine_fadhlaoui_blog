@@ -4,6 +4,7 @@ import log from "@/api/middlewares/log"
 import methodNotAllowed from "@/api/middlewares/methodNotAllowed"
 import config from "@/config.mjs"
 import BaseModel from "@/db/models/BaseModel.mjs"
+import CommentModel from "@/db/models/CommentModel.mjs"
 import PostModel from "@/db/models/PostModel"
 import UserModel from "@/db/models/UserModel.mjs"
 import knex from "knex"
@@ -22,6 +23,7 @@ const mw = (handlers) => async (req, res) => {
     models: {
       PostModel,
       UserModel,
+      CommentModel,
     },
     req,
     res,

@@ -1,5 +1,6 @@
 import BaseModel from "@/db/models/BaseModel.mjs"
 import UserModel from "./UserModel.mjs"
+import CommentModel from "./CommentModel.mjs"
 
 class PostModel extends BaseModel {
   static tableName = "posts"
@@ -12,6 +13,14 @@ class PostModel extends BaseModel {
         join: {
           from: "posts.userId",
           to: "users.id",
+        },
+      },
+      comments: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: CommentModel,
+        join: {
+          from: "posts.id",
+          to: "comments.postId",
         },
       },
     }

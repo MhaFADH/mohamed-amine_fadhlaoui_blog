@@ -24,7 +24,7 @@ const handle = mw({
     }) => {
       const post = await PostModel.query()
         .findById(postId)
-        .withGraphFetched("user")
+        .withGraphFetched("[user,comments.[user]]")
         .throwIfNotFound()
 
       res.send(post)
