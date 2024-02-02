@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { useQuery } from "@tanstack/react-query"
 import apiClient from "@/web/services/apiClient"
 import Loader from "@/web/components/ui/Loader"

@@ -4,6 +4,7 @@ import UserModel from "../models/UserModel.mjs"
 export const seed = async (db) => {
   await db("posts").delete()
   await db("users").delete()
+  await db("comments").delete()
 
   const [passwordHash, passwordSalt] =
     await UserModel.hashPassword("Admin.1234")

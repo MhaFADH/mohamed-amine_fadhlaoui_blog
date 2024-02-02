@@ -3,18 +3,23 @@ import apiClient from "@/web/services/apiClient"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import { useSession } from "@/web/components/SessionContext"
+import config from "@/config.mjs"
 import PostsList from "@/web/components/ui/PostsList"
+import { useEffect } from "react"
 
-export const getServerSideProps = async ({ query: { page } }) => {
-  const data = await apiClient("/posts", { params: { page } })
+export const getServerSideProps = async ({ query: { page }, req }) => {
+  const data = await apiClient("/dashboard", {
+    params: { page },
+    headers: {
+      cookie: req.cookies[config.security.jwt.cookieName],
+    },
+  })
 
   return {
-    props: {
-      initialData: data,
-    },
+    props: { initialData: data },
   }
 }
-const IndexPage = ({ initialData }) => {
+const DashBoardPage = ({ initialData }) => {
   const { query } = useRouter()
   const router = useRouter()
   const { session } = useSession()
@@ -22,12 +27,13 @@ const IndexPage = ({ initialData }) => {
   const {
     isFetching,
     data: {
-      result: posts,
+      result: { posts, countCom, countPost },
       meta: { count },
     },
+    refetch,
   } = useQuery({
-    queryKey: ["posts", page],
-    queryFn: () => apiClient("/posts", { params: { page } }),
+    queryKey: ["postsDashboard", page],
+    queryFn: () => apiClient("/dashboard", { params: { page } }),
     initialData,
     enabled: false,
   })
@@ -35,10 +41,17 @@ const IndexPage = ({ initialData }) => {
     router.push(`/posts/edit/${id}`)
   }
 
+  useEffect(() => {
+    refetch()
+  }, [])
+
   return (
     <div className="relative">
       {isFetching && <Loader />}
-
+      <div>
+        <p>comments number: {countCom}</p>
+        <p>posts number: {countPost}</p>
+      </div>
       {posts && (
         <PostsList
           count={count}
@@ -52,4 +65,4 @@ const IndexPage = ({ initialData }) => {
   )
 }
 
-export default IndexPage
+export default DashBoardPage

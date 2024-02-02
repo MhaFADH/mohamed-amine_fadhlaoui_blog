@@ -17,19 +17,22 @@ const Header = () => {
       <div className="flex md:max-w-3xl mx-auto p-4">
         <div className="text-2xl">
           <Link href="/" styless>
-            LOGO
+            BLOG
           </Link>
         </div>
         <nav className="ms-auto">
           <ul className="flex h-full gap-4 items-center">
             {session ? (
               <>
+                <MenuItem href="/dashboard">Dashboard</MenuItem>
+                <MenuItem href="/posts/create">Create post</MenuItem>
+                {session.isAdmin && (
+                  <MenuItem href="/users-list">List users</MenuItem>
+                )}
                 <MenuItem href={`/edit-profile/${session.id}`}>
                   Edit profile
                 </MenuItem>
 
-                <MenuItem href="/posts/create">Create post</MenuItem>
-                <MenuItem href="/users-list">List users</MenuItem>
                 <li>
                   <Button
                     variant="transparent"
