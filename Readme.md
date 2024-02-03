@@ -19,7 +19,7 @@
 
 - `DB__CONNECTION` it will contain the connection string to the database
 
-- `NEXT_PUBLIC_API__BASE_URL` should contain the base url of the website following this path: `/api`
+- `NEXT_PUBLIC_API__BASE_URL` should contain the base url of the website followed by this path: `/api`
 
 - `SECURITY__JWT__SECRET`
 
