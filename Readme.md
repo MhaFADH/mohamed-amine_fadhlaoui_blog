@@ -14,7 +14,7 @@
 
 ## Step 3
 
-> You need to create a .env file at the root of the project.
+> You need to create a `.env.local` file at the root of the project.
 > <br/>this file will contain the following keys:
 
 - `DB__CONNECTION` it will contain the connection string to the database
