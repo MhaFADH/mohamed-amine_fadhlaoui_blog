@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import Pagination from "@/web/components/ui/Pagination"
 import { formatDateTimeShort } from "@/utils/formatters"
 

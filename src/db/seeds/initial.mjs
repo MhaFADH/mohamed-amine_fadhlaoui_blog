@@ -22,8 +22,8 @@ export const seed = async (db) => {
     [...Array(25)].map(() => ({
       username: faker.internet.userName(),
       email: faker.internet.email(),
-      passwordHash: "alskdjalsdkjasdlkjalskdjalsdkjasdlkjalskdjalsdkjasdlkj",
-      passwordSalt: "alskdjalsdkjasdlkjalskdjalsdkjasdlkjalskdjalsdkjasdlkj",
+      passwordHash,
+      passwordSalt,
       enabled: "true",
       isAdmin: "false",
     })),

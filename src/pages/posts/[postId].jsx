@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { useQuery } from "@tanstack/react-query"
 import apiClient from "@/web/services/apiClient"
 import Loader from "@/web/components/ui/Loader"
@@ -10,6 +11,7 @@ import { useRouter } from "next/router"
 import CommentsList from "@/web/components/ui/CommentsList"
 
 export const getServerSideProps = async ({ params: { postId } }) => {
+  await apiClient.patch(`posts/visits-update/${postId}`)
   const post = await apiClient(`/posts/${postId}`)
 
   return {
@@ -30,9 +32,10 @@ const PostPage = ({ initialData, postId }) => {
     data: post,
     refetch,
   } = useQuery({
-    queryKey: ["post"],
+    queryKey: ["post", postId],
     queryFn: () => apiClient(`/posts/${postId}`),
     initialData,
+    cacheTime: 0,
     enabled: false,
   })
   const handleSubmit = async (values) => {
@@ -56,12 +59,10 @@ const PostPage = ({ initialData, postId }) => {
     <div className="flex flex-row bg-slate-100">
       {isFetching && <Loader />}
       <div className=" basis-2/3 text-center  py-3.5 ">
-        {parseInt(session?.id, 10) === post.user.id ? (
+        {parseInt(session?.id, 10) === post.user.id && (
           <button className="bg-slate-300 p-2" onClick={handleClickEdit}>
             Edit
           </button>
-        ) : (
-          <></>
         )}
         <p className="py-4 text-4xl">{post.title}</p>
         <p className="py-36 text-2xl">{post.content}</p>

@@ -20,6 +20,7 @@ const auth = async (ctx) => {
 
     await next()
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.info(err)
     throw new ForbiddenError()
   }
