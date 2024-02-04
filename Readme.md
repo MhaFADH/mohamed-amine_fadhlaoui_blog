@@ -14,12 +14,12 @@
 
 ## Step 3
 
-> You need to create a .env file at the root of the project.
+> You need to create a `.env.local` file at the root of the project.
 > <br/>this file will contain the following keys:
 
 - `DB__CONNECTION` it will contain the connection string to the database
 
-- `NEXT_PUBLIC_API__BASE_URL` should contain the base url of the website following this path: `/api`
+- `NEXT_PUBLIC_API__BASE_URL` should contain the base url of the website followed by this path: `/api`
 
 - `SECURITY__JWT__SECRET`
 
