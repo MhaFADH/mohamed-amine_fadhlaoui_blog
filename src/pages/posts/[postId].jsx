@@ -39,7 +39,7 @@ const PostPage = ({ initialData, postId }) => {
     enabled: false,
   })
   const handleSubmit = async (values) => {
-    if (!session.id || !values.comment) {
+    if (!session || !values.comment) {
       return
     }
 
