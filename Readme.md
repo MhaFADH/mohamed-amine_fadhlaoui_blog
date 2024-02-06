@@ -44,3 +44,4 @@
 #### `npm run dev`
 
 > The password for every user generated from the seed is `Admin.1234`, but if you want to access a random account, you'll have to check for the account's generated email directly in database.
+> Admin account: `admin@admin.com`
